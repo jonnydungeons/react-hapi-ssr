@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
+import Navbar from './components/Navbar'
 import routes from './routes'
-import Navbar from './Navbar'
 
 
 class App extends Component {
@@ -17,7 +17,7 @@ class App extends Component {
               key={path}
               path={path}
               exact={exact}
-              render={(props) => (
+              render={props => (
                 <C {...props} {...rest} data={this.props.data} />
               )}
             />

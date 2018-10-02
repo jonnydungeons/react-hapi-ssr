@@ -1,12 +1,14 @@
 'use strict'
 
 import Hapi from 'hapi'
+import HapiAutCookie from 'hapi-auth-cookie'
 import Inert from 'inert'
 import Path from 'path'
 import { StaticRouter, matchPath } from 'react-router-dom'
 import { renderToString } from 'react-dom/server'
 import React from 'react'
 import serialize from 'serialize-javascript'
+import Handlers from './handlers'
 import routes from '../shared/routes'
 import App from '../shared/App'
 
@@ -44,10 +46,43 @@ const Server = Hapi.server({
 async function start() {
 
   try {
+    // Register plugins
+    await Server.register([Inert, HapiAutCookie])
 
-    await Server.register([Inert])
+    // Setup cache
+    const cache = Server.cache({
+      segment: 'sessions',
+      expiresIn: 3 * 24 * 60 * 60 * 1000
+    })
 
-    // Add the route
+    // Assign cache to server
+    Server.app.cache = cache
+
+    // Configure auth strategy
+    Server.auth.strategy('session', 'cookie', {
+      password: 'password-should-be-32-characters',
+      cookie: 'sid-example',
+      redirectTo: '/login',
+      isSecure: false,
+      isHttpOnly: true,
+      validateFunc: async (request, session) => {
+        const cached = await cache.get(session.sid),
+          out = { valid: !!cached }
+
+        if (out.valid) {
+            out.credentials = cached.account
+        }
+
+        console.log('out', out)
+
+        return out
+      }
+    })
+
+    // Assign default strategy
+    Server.auth.default('session')
+
+    // Add routes
     Server.route([
       {
         method: 'GET',
@@ -56,12 +91,30 @@ async function start() {
           directory: {
             path: 'assets'
           }
+        },
+        options: {
+          auth: false
         }
       },
       {
         method:'GET',
         path:'/',
-        config: {
+        options: {
+          auth: false,
+          pre: [
+            { method: pre1, assign: 'm1' }
+          ],
+          handler: async(request,h) => {
+            const res = await request.pre.m1
+            return h.response(res)
+          }
+        }
+      },
+      {
+        method:'GET',
+        path:'/login',
+        options: {
+          auth: { mode: 'try' },
           pre: [
             { method: pre1, assign: 'm1' }
           ],
@@ -74,13 +127,25 @@ async function start() {
       {
         method:'GET',
         path:'/account',
-        config: {
+        options: {
           pre: [
             { method: pre1, assign: 'm1' }
           ],
           handler: async(request,h) => {
             const res = await request.pre.m1
             return h.response(res)
+          }
+        }
+      },
+      {
+        method: ['GET','POST'],
+        path: '/api/v1/login',
+        handler: Handlers.Api.Login,
+        options: {
+          auth: false,
+          cors: {
+            origin: ['*'],
+            credentials: true
           }
         }
       }

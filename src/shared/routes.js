@@ -1,6 +1,8 @@
-import Home from './Home'
-import Account from './Account'
-import { Api as api } from './api'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Account from './pages/Account'
+import { MockApi as mockApi } from './apis/mock'
+import { Api as Api } from './apis/index'
 
 const routes = [
   {
@@ -9,11 +11,14 @@ const routes = [
     component: Home
   },
   {
+    path: '/login',
+    component: Login
+  },
+  {
     path: '/account',
     component: Account,
     fetchInitialData: () => new Promise((resolve, reject) => {
-      const data = api.load()
-
+      const data = mockApi.load()
       return resolve(data)
     })
   }

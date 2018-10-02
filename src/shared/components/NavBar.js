@@ -2,13 +2,20 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 
 export default function Navbar () {
-  const links = [{
-    name: 'Home',
-    path: '/'
-  }, {
-    name: 'Account',
-    path: '/account',
-  }]
+  const links = [
+    {
+      name: 'Home',
+      path: '/'
+    },
+    {
+      name: 'Login',
+      path: '/login'
+    },
+    {
+      name: 'Account',
+      path: '/account',
+    }
+  ]
 
   return (
     <ul>

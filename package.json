@@ -21,6 +21,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "hapi": "^17.6.0",
+    "hapi-auth-cookie": "^9.0.0",
     "inert": "^5.1.0",
     "isomorphic-fetch": "^2.2.1",
     "react": "^16.5.2",

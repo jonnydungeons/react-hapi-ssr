@@ -1,6 +1,6 @@
 import data from './data.json'
 
-class Api {
+class MockApi {
   static load() {
 
     return new Promise((resolve) => {
@@ -13,4 +13,4 @@ class Api {
   }
 }
 
-export { Api }
+export { MockApi }
