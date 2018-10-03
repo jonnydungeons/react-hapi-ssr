@@ -12,7 +12,7 @@ const HapiReactCookie = async (request, h) => {
     if (!h.state || !request.response) {
       return
     }
-    console.log('test')
+
     if (change.value === undefined) {
       h.unstate(change.name, change.options)
     } else {
