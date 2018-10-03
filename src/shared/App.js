@@ -22,17 +22,15 @@ class App extends Component {
   constructor(props) {
     super(props)
 
-    const { cookies } = props
-
     this.state = {
       isAuthenticated: false,
-      accountCookie: cookies.get('skilllit.com') || {}
+      //accountCookie: cookies.get('skilllit.com') || {}
     }
   }
 
   render() {
-    const { isAuthenticated, accountCookie } = this.state
-    console.log('accountCookie', accountCookie)
+    const { isAuthenticated } = this.state
+    console.log('cookies', this.props.cookies)
     return (
       <div>
         <Navbar />

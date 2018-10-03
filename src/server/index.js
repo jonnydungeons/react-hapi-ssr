@@ -86,7 +86,7 @@ async function start() {
       cookie: 'skilllitcom',
       redirectTo: '/login',
       isSecure: false,
-      isHttpOnly: true,
+      isHttpOnly: false,
       validateFunc: async (request, session) => {
         console.log('validateFunc')
         const cached = await cache.get(session.sid),
