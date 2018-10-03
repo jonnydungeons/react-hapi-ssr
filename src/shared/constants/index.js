@@ -11,8 +11,8 @@ const Constants = {
   },
   URI: {
     API: {
-      LOGIN: `http:/localhost:8000/api/v1/login`,
-      LOGOUT: `http:/localhost:8000/api/v1/logout`
+      LOGIN: `/api/v1/login`,
+      LOGOUT: `/api/v1/logout`
     }
   }
 }

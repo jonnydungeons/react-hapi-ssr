@@ -1,11 +1,20 @@
 import React from 'react'
+import { Provider } from 'react-redux'
+import { CookiesProvider } from 'react-cookie'
 import { hydrate } from 'react-dom'
-import App from '../shared/App'
 import { BrowserRouter } from 'react-router-dom'
+import configureStore, { history } from '../shared/store/configureStore'
+import App from '../shared/App'
+
+const store = configureStore()
 
 hydrate(
-  <BrowserRouter>
-    <App data={window.__INITIAL_DATA__} />
-  </BrowserRouter>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <CookiesProvider>
+        <App />
+      </CookiesProvider>
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('app')
 )

@@ -1,6 +1,7 @@
 import data from './data.json'
 
 class MockApi {
+
   static load() {
 
     return new Promise((resolve) => {

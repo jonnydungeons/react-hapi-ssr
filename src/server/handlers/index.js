@@ -12,6 +12,7 @@ const users = {
 Handlers = {
   Api: {
     Login: async (request, h) => {
+
       let message = '',
         account = null
 
@@ -19,14 +20,14 @@ Handlers = {
         if (!request.payload.username ||
             !request.payload.password) {
 
-            message = 'Missing username or password';
+            message = 'Missing username or password'
         }
         else {
-            account = users[request.payload.username];
+            account = users[request.payload.username]
             if (!account ||
                 account.password !== request.payload.password) {
 
-                message = 'Invalid username or password';
+                message = 'Invalid username or password'
             }
         }
       }
@@ -35,12 +36,12 @@ Handlers = {
 
         //await request.server.app.cache.get(request.params.shortId)
       }
-      const sid = String(+uuid);
+      const sid = String(+uuid)
 
-      await request.server.app.cache.set(sid, { account }, 0);
-      request.cookieAuth.set({ sid });
+      await request.server.app.cache.set(sid, { account }, 0)
+      request.cookieAuth.set({ sid })
 
-      return h.redirect('/');
+      return h.response({ status: 200, data: 'logged in' })
     },
     Logout: async (request, h) => {
       request.server.app.cache.drop(request.state['sid-example'].sid)

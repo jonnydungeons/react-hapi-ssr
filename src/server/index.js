@@ -1,39 +1,61 @@
-'use strict'
-
 import Hapi from 'hapi'
+import Bounce from 'bounce'
 import HapiAutCookie from 'hapi-auth-cookie'
 import Inert from 'inert'
 import Path from 'path'
 import { StaticRouter, matchPath } from 'react-router-dom'
 import { renderToString } from 'react-dom/server'
 import React from 'react'
+import { Provider } from 'react-redux'
+import { CookiesProvider } from 'react-cookie'
 import serialize from 'serialize-javascript'
 import Handlers from './handlers'
-import routes from '../shared/routes'
+import configureStore from '../shared/store/configureStore'
+import { Routes } from '../shared/routes'
 import App from '../shared/App'
 
 // Create a server with a host and port
 const pre1 = async(request, h) => {
-  const activeRoute = routes.find(route => matchPath(request.url.path, route)) || {},
-    _data = activeRoute.fetchInitialData ? await activeRoute.fetchInitialData() : {}
 
-  const markup = renderToString(
-    <StaticRouter location={request.url.path} context={{}}>
-      <App data={_data} />
-    </StaticRouter>
-  )
+  try {
+    console.log('pre1', request.state)
 
-  return `<!DOCTYPE html>
-  <html>
-    <head>
-      <title>Hapi React SSR</title>
-    </head>
-    <body>
-      <div id='app'>${markup}</div>
-      <script type='text/javascript' src='/assets/bundle.js' defer></script>
-      <script>window.__INITIAL_DATA__ = ${serialize(_data)}</script>
-    </body>
-  </html>`
+    const activeRoute = Routes.find(
+      route => matchPath(request.url.path, route)) || {}
+
+    const data = activeRoute.fetchInitialData
+      ? await activeRoute.fetchInitialData() : {},
+      context = { data }
+
+    const store = configureStore()
+
+    const markup = renderToString(
+      <Provider store={store}>
+        <StaticRouter location={request.url.path} context={context}>
+          <CookiesProvider>
+            <App />
+          </CookiesProvider>
+        </StaticRouter>
+      </Provider>
+    )
+
+    return `<!DOCTYPE html>
+      <html>
+        <head>
+          <title>Hapi React SSR</title>
+        </head>
+        <body>
+          <div id='app'>${markup}</div>
+          <script type='text/javascript' src='/assets/bundle.js' defer></script>
+          <script>window.__INITIAL_DATA__ = ${serialize(data)}</script>
+        </body>
+      </html>`
+
+  } catch(err) {
+
+    Bounce.rethrow(err, 'system')
+
+  }
 }
 
 const Server = Hapi.server({
@@ -61,19 +83,18 @@ async function start() {
     // Configure auth strategy
     Server.auth.strategy('session', 'cookie', {
       password: 'password-should-be-32-characters',
-      cookie: 'sid-example',
+      cookie: 'skilllitcom',
       redirectTo: '/login',
       isSecure: false,
       isHttpOnly: true,
       validateFunc: async (request, session) => {
+        console.log('validateFunc')
         const cached = await cache.get(session.sid),
           out = { valid: !!cached }
 
         if (out.valid) {
             out.credentials = cached.account
         }
-
-        console.log('out', out)
 
         return out
       }
@@ -82,18 +103,59 @@ async function start() {
     // Assign default strategy
     Server.auth.default('session')
 
+    // Register extension event
+    Server.ext({
+      type: 'onPreResponse',
+      method: async (request, h) => {
+
+        const statusCode = request.response.statusCode
+
+        switch(statusCode) {
+
+          case 404: {
+
+            console.log('not found')
+            break
+          }
+
+          case 403: {
+
+            console.log('unauthorized')
+            break
+          }
+
+          case 401: {
+
+            console.log('unauthorized')
+            break
+          }
+
+          case 302: {
+
+            console.log('redirect')
+            break
+          }
+
+          default:
+            console.log('statuscode is ', statusCode)
+        }
+
+        return h.continue
+      }
+    })
+
     // Add routes
     Server.route([
       {
         method: 'GET',
         path: '/assets/{param*}',
-        handler: {
-          directory: {
-            path: 'assets'
-          }
-        },
         options: {
-          auth: false
+          auth: false,
+          handler: {
+            directory: {
+              path: 'assets'
+            }
+          },
         }
       },
       {
@@ -128,6 +190,7 @@ async function start() {
         method:'GET',
         path:'/account',
         options: {
+          auth: false,
           pre: [
             { method: pre1, assign: 'm1' }
           ],
@@ -146,6 +209,20 @@ async function start() {
           cors: {
             origin: ['*'],
             credentials: true
+          }
+        }
+      },
+      {
+        method: '*',
+        path: '/{p*}',
+        options: {
+          auth: false,
+          pre: [
+            { method: pre1, assign: 'm1' }
+          ],
+          handler: async(request,h) => {
+            const res = await request.pre.m1
+            return h.response(res)
           }
         }
       }

@@ -4,7 +4,7 @@ import Account from './pages/Account'
 import { MockApi as mockApi } from './apis/mock'
 import { Api as Api } from './apis/index'
 
-const routes = [
+const Routes = [
   {
     path: '/',
     exact: true,
@@ -17,6 +17,7 @@ const routes = [
   {
     path: '/account',
     component: Account,
+    isPrivate: true,
     fetchInitialData: () => new Promise((resolve, reject) => {
       const data = mockApi.load()
       return resolve(data)
@@ -24,4 +25,6 @@ const routes = [
   }
 ]
 
-export default routes
+export {
+  Routes
+}
