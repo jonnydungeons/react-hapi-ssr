@@ -20,11 +20,14 @@ const fakeAuth = {
 class App extends Component {
 
   constructor(props) {
+
     super(props)
 
+    const { cookies } = props
+    console.log('cookies', cookies)
+    console.log('constructor cookie', cookies.get('sid'))
     this.state = {
       isAuthenticated: false,
-      //accountCookie: cookies.get('skilllit.com') || {}
     }
   }
 
@@ -39,7 +42,7 @@ class App extends Component {
             const publicRender = props => (<C {...props} {...rest} />),
               privateRender = props => (!isAuthenticated
                 ? <Redirect to={{pathname: '/login', state: { from: props.location }}} />
-                : <C {...props} {...rest} />)
+                : <C {...props} {...rest} cookies={props.cookies} />)
 
             const renderProperty = !isPrivate ? publicRender : privateRender
 

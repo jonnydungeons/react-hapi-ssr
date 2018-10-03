@@ -3,12 +3,13 @@ import Bounce from 'bounce'
 import HapiAutCookie from 'hapi-auth-cookie'
 import Inert from 'inert'
 import Path from 'path'
+import React from 'react'
 import { StaticRouter, matchPath } from 'react-router-dom'
 import { renderToString } from 'react-dom/server'
-import React from 'react'
 import { Provider } from 'react-redux'
 import { CookiesProvider } from 'react-cookie'
 import serialize from 'serialize-javascript'
+import HapiReactCookie from './plugins/hapi-react-cookie'
 import Handlers from './handlers'
 import configureStore from '../shared/store/configureStore'
 import { Routes } from '../shared/routes'
@@ -17,22 +18,20 @@ import App from '../shared/App'
 // Create a server with a host and port
 const pre1 = async(request, h) => {
 
+  const cookies = await HapiReactCookie(request, h)
+
   try {
-    console.log('pre1', request.state)
 
     const activeRoute = Routes.find(
-      route => matchPath(request.url.path, route)) || {}
-
-    const data = activeRoute.fetchInitialData
+      route => matchPath(request.url.path, route)) || {},
+      data = activeRoute.fetchInitialData
       ? await activeRoute.fetchInitialData() : {},
-      context = { data }
-
-    const store = configureStore()
-
-    const markup = renderToString(
+      context = { data },
+      store = configureStore(),
+      markup = renderToString(
       <Provider store={store}>
         <StaticRouter location={request.url.path} context={context}>
-          <CookiesProvider>
+          <CookiesProvider cookies={request.server.app.universalCookies}>
             <App />
           </CookiesProvider>
         </StaticRouter>
@@ -82,8 +81,8 @@ async function start() {
 
     // Configure auth strategy
     Server.auth.strategy('session', 'cookie', {
-      password: 'password-should-be-32-characters',
-      cookie: 'skilllitcom',
+      password: 'a1276d5c-24fc-4d40-b4b5-4134f51e',
+      cookie: 'sid',
       redirectTo: '/login',
       isSecure: false,
       isHttpOnly: false,
