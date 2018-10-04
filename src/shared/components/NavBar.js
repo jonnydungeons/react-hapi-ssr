@@ -9,8 +9,8 @@ class Navbar extends Component {
   }
 
   render() {
-    const { account, actions } = this.props
-    const accountIsInSession = Object.keys(account).length !== 0,
+    const { account, actions } = this.props,
+      accountIsInSession = Object.keys(account).length !== 0,
       links = [
           {
             name: 'Home',

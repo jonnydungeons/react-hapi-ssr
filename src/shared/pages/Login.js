@@ -10,12 +10,10 @@ class Login extends Component {
   render() {
 
     const { from } = this.props.location.state || { from: { pathname: '/' } },
-      { /*accountIsInSession,*/ account } = this.props
-      //console.log('accountIsInSession login', accountIsInSession)
-    /*if (!accountIsInSession) {
+      { account } = this.props,
+      accountIsInSession = Object.keys(account).length !== 0
 
-      return <Redirect to={from} />
-    }*/
+    if (accountIsInSession) return <Redirect to='/account' />
 
     return (
       <div>
