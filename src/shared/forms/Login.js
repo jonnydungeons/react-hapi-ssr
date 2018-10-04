@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
 import TextInput from './TextInput'
 import {login} from '../actions/index'
 
@@ -29,13 +27,12 @@ class LoginForm extends Component {
   }
 
   handleSubmit(e) {
-    const { login, loginCallback } = this.props
+    const { actions, loginCallback } = this.props
 
     e.preventDefault()
 
-    login(this.state.form)
+    actions.login(this.state.form)
 
-    //loginCallback()
   }
 
   render() {
@@ -55,12 +52,4 @@ class LoginForm extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-
-  return {
-    login: bindActionCreators(login, dispatch)
-  }
-}
-
-export default connect(null, mapDispatchToProps)(LoginForm)
-//export default LoginForm
+export default LoginForm

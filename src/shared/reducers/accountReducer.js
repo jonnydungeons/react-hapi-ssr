@@ -7,7 +7,10 @@ const accountReducer = (state = initialState.account, action) => {
   switch (action.type) {
 
     case constants.ACTIONS.LOGIN.SUCCESS: {
-      return action.data
+
+      const account = {...action.data}
+
+      return account
     }
 
     default:

@@ -40,7 +40,7 @@ class Api {
 
       const encodedURI = encodeURI(`${constants.URI.API.LOGOUT}`)
 
-      fetch(encodedURI, { method: 'GET', credentials: 'include' })
+      fetch(encodedURI, { credentials: 'include', method: 'POST' })
       .then((response) => resolve(response.json()))
       .catch(err => reject(err))
     })

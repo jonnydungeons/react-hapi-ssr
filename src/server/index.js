@@ -34,7 +34,6 @@ Server.app.cache = cache
 // Create a server with a host and port
 const pre1 = async(request, h) => {
 
-
   try {
     const cookies = await HapiReactCookie(request, h),
       accountInSession = request.state.hasOwnProperty('sid'),
@@ -43,7 +42,7 @@ const pre1 = async(request, h) => {
         route => matchPath(request.url.path, route)) || {},
         data = activeRoute.fetchInitialData
         ? await activeRoute.fetchInitialData() : {},
-      context = { ...account },
+      context = { ...data },
       store = configureStore()
 
       const markup = renderToString(
@@ -204,9 +203,36 @@ async function start() {
         }
       },
       {
-        method: ['GET','POST'],
+        method: 'GET',
         path: '/api/v1/login',
         handler: Handlers.Api.Login,
+        options: {
+          auth: false,
+          pre: [
+            { method: pre1, assign: 'm1' }
+          ],
+          cors: {
+            origin: ['*'],
+            credentials: true
+          }
+        }
+      },
+      {
+        method: 'POST',
+        path: '/api/v1/login',
+        handler: Handlers.Api.Login,
+        options: {
+          auth: false,
+          cors: {
+            origin: ['*'],
+            credentials: true
+          }
+        }
+      },
+      {
+        method: 'POST',
+        path: '/api/v1/logout',
+        handler: Handlers.Api.Logout,
         options: {
           auth: false,
           cors: {

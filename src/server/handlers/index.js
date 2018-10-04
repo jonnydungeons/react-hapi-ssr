@@ -16,7 +16,7 @@ Handlers = {
         ip = request.info.remoteAddress
 
       let message = '',
-        account = null
+        account = {}
 
       if (request.method === 'post') {
 
@@ -24,7 +24,7 @@ Handlers = {
           message = 'Missing email'
         }
         else {
-          account = users[payload.email]
+          account = users[payload.email] || {}
         }
 
         const sid = String(1)
@@ -32,11 +32,15 @@ Handlers = {
         await request.server.app.cache.set(sid, account, 0)
 
         request.cookieAuth.set({ sid })
+
       }
 
       if (request.method === 'get') {
+
         const accountInSession = request.state.hasOwnProperty('sid')
+
         account = accountInSession ? await request.server.app.cache.get(request.state['sid'].sid) : {}
+
       }
 
       return h.response({ status: 200, data: account })
@@ -44,7 +48,7 @@ Handlers = {
     Logout: async (request, h) => {
       request.server.app.cache.drop(request.state['sid'].sid)
       request.cookieAuth.clear()
-      return h.response({ status: 200, data: 'logged out' })
+      return h.response({ status: 200, data: {} })
     }
   }
 }

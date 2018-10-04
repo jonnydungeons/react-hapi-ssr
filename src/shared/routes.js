@@ -17,11 +17,13 @@ const Routes = [
   {
     path: '/account',
     component: Account,
-    isPrivate: true,
+    isPrivate: true/*,
     fetchInitialData: () => new Promise((resolve, reject) => {
+
       const data = mockApi.load()
+
       return resolve(data)
-    })
+    })*/
   }
 ]
 

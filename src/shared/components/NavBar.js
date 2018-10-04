@@ -1,31 +1,40 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 
-export default function Navbar () {
-  const links = [
-    {
-      name: 'Home',
-      path: '/'
-    },
-    {
-      name: 'Login',
-      path: '/login'
-    },
-    {
-      name: 'Account',
-      path: '/account',
-    }
-  ]
+class Navbar extends Component {
+  constructor(props) {
 
-  return (
-    <ul>
-      {links.map(({ name, path }) => (
-        <li key={path}>
-          <NavLink activeStyle={{fontWeight: 'bold'}} to={`${path}`}>
-            {name}
-          </NavLink>
-        </li>
-      ))}
-    </ul>
-  )
+    super(props)
+
+  }
+
+  render() {
+    const { account, actions } = this.props
+    const accountIsInSession = Object.keys(account).length !== 0,
+      links = [
+          {
+            name: 'Home',
+            path: '/'
+          },
+          {
+            name: 'Account',
+            path: '/account',
+          }
+        ]
+
+    return (
+      <ul>
+        {links.map(({ name, path }) => (
+          <li key={path}>
+            <NavLink activeStyle={{fontWeight: 'bold'}} to={`${path}`}>
+              {name}
+            </NavLink>
+          </li>
+        ))}
+        <li>{!accountIsInSession ? <NavLink to='/login'>Login</NavLink> : <span onClick={actions.logout}>Logout</span>}</li>
+      </ul>
+    )
+  }
 }
+
+export default Navbar

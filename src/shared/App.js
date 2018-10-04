@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
+import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import { withCookies, Cookies } from 'react-cookie'
 import { withRouter } from 'react-router'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { instanceOf, PropTypes } from 'prop-types'
+import * as actions from './actions/index'
 import Navbar from './components/Navbar'
 import { Routes } from './routes'
 import NotFound from './pages/NotFound'
@@ -14,31 +16,28 @@ class App extends Component {
 
     super(props)
 
-    const { account, cookies } = props
+    const { account } = props
 
     this.state = {
       accountIsInSession: Object.keys(account).length !== 0,
-      account: props.account,
-      cookies
+      account: account
     }
 
   }
 
   render() {
-    const { accountIsInSession, account, cookies } = this.state
-
-    console.log('App props', this.props)
+    const { accountIsInSession, account } = this.state
 
     return (
       <div>
-        <Navbar />
+        <Navbar {...this.props} />
         <Switch>
           {Routes.map(({ path, exact, component: C, isPrivate = false, ...rest}) => {
             const publicRender = props => (<C {...props} {...rest} {...this.props} />),
               privateRender = props => (accountIsInSession
                 ? <Redirect to={{pathname: '/login',
                   state: { from: props.location.pathname} }} />
-                : <C {...props} {...rest} {...this.props} cookies={props.cookies} />),
+                : <C {...props} {...rest} {...this.props} />),
               renderProperty = !isPrivate ? publicRender : privateRender
 
             return <Route key={path} path={path} exact={exact} render={renderProperty} />
@@ -51,12 +50,16 @@ class App extends Component {
 }
 
 App.propTypes = {
-  account: PropTypes.object,
-  cookies: instanceOf(Cookies).isRequired
+  account: PropTypes.object.isRequired,
+  cookies: instanceOf(Cookies).isRequired,
+  actions: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
-  account: state.account
-})
+    account: state.account
+  }),
+  mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(actions, dispatch)
+  })
 
-export default withRouter(withCookies(connect(mapStateToProps)(App)))
+export default withRouter(withCookies(connect(mapStateToProps, mapDispatchToProps)(App)))
