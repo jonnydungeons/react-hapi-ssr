@@ -4,7 +4,7 @@ import { Constants as constants } from '../constants/index'
 const fetchSuccess = (status) => ({
   type: constants.FETCH.SUCCESS, status
 }),
-loginSuccess = (data) => ({
+accountSuccess = (data) => ({
   type: constants.ACTIONS.LOGIN.SUCCESS, data
 })
 
@@ -14,7 +14,22 @@ export const login = data => {
 
     return api.login(data).then(response => {
 
-      dispatch(loginSuccess(response))
+      dispatch(accountSuccess(response.data))
+
+    }).catch(error => {
+
+      throw(error)
+    })
+  }
+}
+
+export const getAccount = () => {
+
+  return dispatch => {
+
+    return api.getAccount().then(response => {
+
+      dispatch(accountSuccess(response.data))
 
     }).catch(error => {
 

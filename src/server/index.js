@@ -15,20 +15,38 @@ import configureStore from '../shared/store/configureStore'
 import { Routes } from '../shared/routes'
 import App from '../shared/App'
 
+// Create Hapi server
+const Server = Hapi.server({
+    host:'0.0.0.0',
+    port:8000,
+    state: { ignoreErrors: true }
+})
+
+// Setup cache
+const cache = Server.cache({
+  segment: 'sessions',
+  expiresIn: 3 * 24 * 60 * 60 * 1000
+})
+
+// Assign cache to server
+Server.app.cache = cache
+
 // Create a server with a host and port
 const pre1 = async(request, h) => {
 
-  const cookies = await HapiReactCookie(request, h)
 
   try {
+    const cookies = await HapiReactCookie(request, h),
+      accountInSession = request.state.hasOwnProperty('sid'),
+      account = accountInSession ? await cache.get(request.state['sid'].sid) : {},
+      activeRoute = Routes.find(
+        route => matchPath(request.url.path, route)) || {},
+        data = activeRoute.fetchInitialData
+        ? await activeRoute.fetchInitialData() : {},
+      context = { ...account },
+      store = configureStore()
 
-    const activeRoute = Routes.find(
-      route => matchPath(request.url.path, route)) || {},
-      data = activeRoute.fetchInitialData
-      ? await activeRoute.fetchInitialData() : {},
-      context = { data },
-      store = configureStore(),
-      markup = renderToString(
+      const markup = renderToString(
       <Provider store={store}>
         <StaticRouter location={request.url.path} context={context}>
           <CookiesProvider cookies={request.server.app.universalCookies}>
@@ -37,7 +55,7 @@ const pre1 = async(request, h) => {
         </StaticRouter>
       </Provider>
     )
-
+    console.log('context', context)
     return `<!DOCTYPE html>
       <html>
         <head>
@@ -46,7 +64,7 @@ const pre1 = async(request, h) => {
         <body>
           <div id='app'>${markup}</div>
           <script type='text/javascript' src='/assets/bundle.js' defer></script>
-          <script>window.__INITIAL_DATA__ = ${serialize(data)}</script>
+          <script>window.__INITIAL_DATA__ = ${serialize(context)}</script>
         </body>
       </html>`
 
@@ -57,27 +75,12 @@ const pre1 = async(request, h) => {
   }
 }
 
-const Server = Hapi.server({
-    host:'0.0.0.0',
-    port:8000,
-    state: { ignoreErrors: true }
-})
-
 // Start the server
 async function start() {
 
   try {
     // Register plugins
     await Server.register([Inert, HapiAutCookie])
-
-    // Setup cache
-    const cache = Server.cache({
-      segment: 'sessions',
-      expiresIn: 3 * 24 * 60 * 60 * 1000
-    })
-
-    // Assign cache to server
-    Server.app.cache = cache
 
     // Configure auth strategy
     Server.auth.strategy('session', 'cookie', {
@@ -87,12 +90,13 @@ async function start() {
       isSecure: false,
       isHttpOnly: false,
       validateFunc: async (request, session) => {
-        console.log('validateFunc')
+
         const cached = await cache.get(session.sid),
           out = { valid: !!cached }
 
         if (out.valid) {
-            out.credentials = cached.account
+
+          out.credentials = cached
         }
 
         return out
@@ -136,7 +140,7 @@ async function start() {
           }
 
           default:
-            console.log('statuscode is ', statusCode)
+            //console.log('statuscode is ', statusCode)
         }
 
         return h.continue

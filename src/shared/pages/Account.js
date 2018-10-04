@@ -13,15 +13,24 @@ class Account extends Component {
       data = window.__INITIAL_DATA__
       //delete window.__INITIAL_DATA__ // SHOULD I STORE IN REDUX THEN DELETE THIS GLOBAL VARIABLE?
     } else {
-      data = props.staticContext.data
+      data = props.staticContext
     }
 
     this.state = { data }
 
-    this.fetchData = this.fetchData.bind(this)
+    //this.fetchData = this.fetchData.bind(this)
   }
 
   componentDidMount() {
+
+    const { account } = this.props
+
+    if (Object.keys(account).length === 0) {
+      this.setState({account})
+    }
+  }
+
+  /*componentDidMount() {
 
     const { data } = this.state
 
@@ -36,10 +45,12 @@ class Account extends Component {
 
     fetchInitialData()
       .then(data => this.setState({data}))
-  }
+  }*/
 
   render() {
     const { data } = this.state
+
+    console.log('Account page props', this.props)
 
     return (
       <div>

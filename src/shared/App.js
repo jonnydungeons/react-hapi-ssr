@@ -1,21 +1,12 @@
 import React, { Component } from 'react'
+import {connect} from 'react-redux'
 import { withCookies, Cookies } from 'react-cookie'
+import { withRouter } from 'react-router'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { instanceOf, PropTypes } from 'prop-types'
 import Navbar from './components/Navbar'
 import { Routes } from './routes'
 import NotFound from './pages/NotFound'
-
-const fakeAuth = {
-  authenticate(cb) {
-    this.isAuthenticated = true
-    setTimeout(cb, 100)
-  },
-  signout(cb) {
-    this.isAuthenticated = false
-    setTimeout(cb, 100)
-  }
-}
 
 class App extends Component {
 
@@ -23,28 +14,32 @@ class App extends Component {
 
     super(props)
 
-    const { cookies } = props
-    console.log('cookies', cookies)
-    console.log('constructor cookie', cookies.get('sid'))
+    const { account, cookies } = props
+
     this.state = {
-      isAuthenticated: false,
+      accountIsInSession: Object.keys(account).length !== 0,
+      account: props.account,
+      cookies
     }
+
   }
 
   render() {
-    const { isAuthenticated } = this.state
-    console.log('cookies', this.props.cookies)
+    const { accountIsInSession, account, cookies } = this.state
+
+    console.log('App props', this.props)
+
     return (
       <div>
         <Navbar />
         <Switch>
           {Routes.map(({ path, exact, component: C, isPrivate = false, ...rest}) => {
-            const publicRender = props => (<C {...props} {...rest} />),
-              privateRender = props => (!isAuthenticated
-                ? <Redirect to={{pathname: '/login', state: { from: props.location }}} />
-                : <C {...props} {...rest} cookies={props.cookies} />)
-
-            const renderProperty = !isPrivate ? publicRender : privateRender
+            const publicRender = props => (<C {...props} {...rest} {...this.props} />),
+              privateRender = props => (accountIsInSession
+                ? <Redirect to={{pathname: '/login',
+                  state: { from: props.location.pathname} }} />
+                : <C {...props} {...rest} {...this.props} cookies={props.cookies} />),
+              renderProperty = !isPrivate ? publicRender : privateRender
 
             return <Route key={path} path={path} exact={exact} render={renderProperty} />
           })}
@@ -56,7 +51,12 @@ class App extends Component {
 }
 
 App.propTypes = {
+  account: PropTypes.object,
   cookies: instanceOf(Cookies).isRequired
 }
 
-export default withCookies(App)
+const mapStateToProps = state => ({
+  account: state.account
+})
+
+export default withRouter(withCookies(connect(mapStateToProps)(App)))

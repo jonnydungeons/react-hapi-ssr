@@ -22,6 +22,17 @@ class Api {
     })
   }
 
+  static getAccount(data) {
+
+    return new Promise((resolve, reject) => {
+
+      const encodedURI = encodeURI(`${constants.URI.API.LOGIN}`)
+
+      fetch(encodedURI, { credentials: 'include', method: 'GET' })
+      .then((response) => resolve(response.json()))
+      .catch(err => reject(err))
+    })
+  }
 
   static logout() {
 

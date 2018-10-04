@@ -7,7 +7,6 @@ const accountReducer = (state = initialState.account, action) => {
   switch (action.type) {
 
     case constants.ACTIONS.LOGIN.SUCCESS: {
-      console.log('ACTIONS.LOGIN.SUCCESS', action.data)
       return action.data
     }
 

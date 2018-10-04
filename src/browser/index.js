@@ -3,10 +3,13 @@ import { Provider } from 'react-redux'
 import { CookiesProvider } from 'react-cookie'
 import { hydrate } from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
-import configureStore, { history } from '../shared/store/configureStore'
+import configureStore from '../shared/store/configureStore'
+import { getAccount } from '../shared/actions/index'
 import App from '../shared/App'
 
 const store = configureStore()
+
+store.dispatch(getAccount())
 
 hydrate(
   <Provider store={store}>

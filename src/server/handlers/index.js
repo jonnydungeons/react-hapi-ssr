@@ -3,48 +3,46 @@
 let uuid = 1
 
 const users = {
-  jonny: {
-    id: 'jonny',
-    password: '1234',
-    name: 'J0NNYZER0'
+  "jon.ortiz@me.com": {
+    first_name: "Jonny",
+    username: "J0NNYZER0",
+    email: "jon.ortiz@me.com"
   }
 },
 Handlers = {
   Api: {
     Login: async (request, h) => {
+      const payload = JSON.parse(request.payload),
+        ip = request.info.remoteAddress
 
       let message = '',
         account = null
 
       if (request.method === 'post') {
-        if (!request.payload.username ||
-            !request.payload.password) {
 
-            message = 'Missing username or password'
+        if (!payload.email) {
+          message = 'Missing email'
         }
         else {
-            account = users[request.payload.username]
-            if (!account ||
-                account.password !== request.payload.password) {
-
-                message = 'Invalid username or password'
-            }
+          account = users[payload.email]
         }
+
+        const sid = String(1)
+
+        await request.server.app.cache.set(sid, account, 0)
+
+        request.cookieAuth.set({ sid })
       }
 
       if (request.method === 'get') {
-
-        //await request.server.app.cache.get(request.params.shortId)
+        const accountInSession = request.state.hasOwnProperty('sid')
+        account = accountInSession ? await request.server.app.cache.get(request.state['sid'].sid) : {}
       }
-      const sid = String(+uuid)
 
-      await request.server.app.cache.set(sid, { account }, 0)
-      request.cookieAuth.set({ sid })
-
-      return h.response({ status: 200, data: 'logged in' })
+      return h.response({ status: 200, data: account })
     },
     Logout: async (request, h) => {
-      request.server.app.cache.drop(request.state['sid-example'].sid)
+      request.server.app.cache.drop(request.state['sid'].sid)
       request.cookieAuth.clear()
       return h.response({ status: 200, data: 'logged out' })
     }

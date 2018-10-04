@@ -29,13 +29,13 @@ class LoginForm extends Component {
   }
 
   handleSubmit(e) {
-    const { login } = this.props
+    const { login, loginCallback } = this.props
 
     e.preventDefault()
 
     login(this.state.form)
 
-    //alert('Form submitted. email: ' + this.state.form.email)
+    //loginCallback()
   }
 
   render() {

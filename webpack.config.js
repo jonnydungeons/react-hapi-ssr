@@ -19,7 +19,10 @@ const path = require('path'),
     },
     plugins: [
       new webpack.DefinePlugin({
-        __isBrowser__: "true"
+        __isBrowser__: "true",
+        'process.env': {
+          __isBrowser__: true
+        }
       })
     ]
   },
@@ -49,7 +52,10 @@ const path = require('path'),
     },
     plugins: [
       new webpack.DefinePlugin({
-        __isBrowser__: "false"
+        __isBrowser__: "false",
+        'process.env': {
+          __isBrowser__: false
+        }
       })
     ]
   }
