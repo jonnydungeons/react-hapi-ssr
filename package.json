@@ -5,8 +5,9 @@
   "author": "J0NNYZER0",
   "license": "MIT",
   "scripts": {
-    "start": "webpack -w & nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "source ~/envs/react-hapi-ssr/env && webpack -w & nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prod": "node server.js"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
@@ -25,6 +26,9 @@
     "hapi-auth-cookie": "^9.0.0",
     "inert": "^5.1.0",
     "isomorphic-fetch": "^2.2.1",
+    "jsonwebtoken": "^8.3.0",
+    "moment": "^2.22.2",
+    "mysql": "^2.16.0",
     "react": "^16.5.2",
     "react-cookie": "^3.0.4",
     "react-dom": "^16.5.2",
@@ -35,6 +39,7 @@
     "redux-promise": "^0.6.0",
     "redux-thunk": "^2.3.0",
     "serialize-javascript": "^1.5.0",
+    "shortid": "^2.2.13",
     "universal-cookie": "^3.0.4"
   }
 }
