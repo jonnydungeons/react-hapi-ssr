@@ -22,7 +22,9 @@ A tiny robust boilerplate containing the following technologies
 |----------|-------|---|
 |  [Hapi](https://hapijs.com)  |   A rich framework for building applications and services.    | [EggheadIO Course](https://egghead.io/courses/introduction-to-node-servers-with-hapi-js)  |
 |  [Hapi Auth Cookie](https://github.com/hapijs/hapi-auth-cookie)  |   A Hapijs cookie authentication plugin.    | [Hapijs Tutorial](https://hapijs.com/tutorials/cookies?lang=en_US)  |
+|  [Inert](https://github.com/hapijs/inert)  |   Static file and directory handlers for hapi.js.    | [Serving Static Content](https://hapijs.com/tutorials/serving-files?lang=en_US)  |
 |  [Universal Cookie Express](https://github.com/reactivestack/cookies/tree/master/packages/universal-cookie-express)  |   My own baked in version of this plugin located in Hapi React SSR's server/plugins directory.    | [Translated from this original code](https://github.com/reactivestack/cookies/blob/master/packages/universal-cookie-express/src/index.ts)  |
+|  [Serialize Javascript](https://github.com/yahoo/serialize-javascript)  |   Serialize JavaScript to a superset of JSON that includes regular expressions and functions.    | [Serialize used in Tyler Mcginnis SSR Tutorial](https://tylermcginnis.com/react-router-server-rendering/)  |
 
 The starter kit includes a working example app that puts all of the above to use. This utilizes isomorphic javascript rendered from the server. Hapi React SSR attempts to manage data in a more robust way than most examples out on the web. In addition to serializing and storing data on the server I also manage data on the client using redux.
 
