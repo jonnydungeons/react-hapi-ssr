@@ -32,6 +32,8 @@ I would like to give some credit to [Tyler Mcginnis](https://tylermcginnis.com/)
 + [Server Rendering with React and React Router](https://tylermcginnis.com/react-router-server-rendering/)
 + [Protected routes and authentication with React Router v4](https://tylermcginnis.com/react-router-protected-routes-authentication/)
 
+I would also like to give much needed credit to [Cory House](https://www.bitnative.com/) for [React Slingshot](https://github.com/coryhouse/react-slingshot). His project was a critical reference when it came to setting up my redux. My project is not as nearly configured with npm scripts and testability so I would humply invite anyone who wishes to push my project further to go for it!
+
 ---
 
 ## Questions?
