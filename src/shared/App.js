@@ -33,14 +33,8 @@ class App extends Component {
         <Navbar {...this.props} />
         <Switch>
           {Routes.map(({ path, exact, component: C, isPrivate = false, ...rest}) => {
-            const publicRender = props => (<C {...props} {...rest} {...this.props} />)/*,
-              privateRender = props => (accountIsInSession
-                ? <Redirect to={{pathname: '/login',
-                  state: { from: props.location.pathname} }} />
-                : <C {...props} {...rest} {...this.props} />),
-              renderProperty = !isPrivate ? publicRender : privateRender*/
-
-            return <Route key={path} path={path} exact={exact} render={publicRender} />
+            return <Route key={path} path={path} exact
+              render={props => (<C {...props} {...rest} {...this.props} />)} />
           })}
           <Route render={props => (<NotFound {...props} />)} />
         </Switch>

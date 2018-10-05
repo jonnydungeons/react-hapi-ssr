@@ -13,6 +13,7 @@ class Navbar extends Component {
       accountIsInSession = Object.keys(account).length !== 0,
       links = [
           {
+            exact: true,
             name: 'Home',
             path: '/'
           },
@@ -28,14 +29,16 @@ class Navbar extends Component {
 
     return (
       <ul>
-        {links.map(({ name, path }) => (
+        {links.map(({ exact, name, path }) => (
           <li key={path}>
-            <NavLink activeStyle={{fontWeight: 'bold'}} to={`${path}`}>
+            <NavLink exact activeStyle={{fontWeight: 'bold'}} to={`${path}`}>
               {name}
             </NavLink>
           </li>
         ))}
-        <li>{!accountIsInSession ? <NavLink to='/login'>Login</NavLink> : <span onClick={actions.logout}>Logout</span>}</li>
+        <li>{!accountIsInSession
+          ? <NavLink activeStyle={{fontWeight: 'bold'}} to='/login'>Login</NavLink>
+          : <a href="" onClick={actions.logout}>Logout</a>}</li>
       </ul>
     )
   }
