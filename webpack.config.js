@@ -2,7 +2,7 @@ const path = require('path'),
   webpack = require('webpack'),
   browserConfig = {
     target: 'web',
-    mode: 'development',
+    mode: 'production',
     entry: ['./src/browser/index.js'],
     output: {
       path: path.resolve(__dirname, 'assets'),
@@ -28,7 +28,7 @@ const path = require('path'),
   },
   serverConfig = {
     target: 'node',
-    mode: 'development',
+    mode: 'production',
     entry: ['@babel/polyfill','./src/server/index.js'],
     output: {
       path: __dirname,
