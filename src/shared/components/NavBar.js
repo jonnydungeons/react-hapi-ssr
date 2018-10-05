@@ -17,6 +17,10 @@ class Navbar extends Component {
             path: '/'
           },
           {
+            name: 'Widgets',
+            path: '/widgets',
+          },
+          {
             name: 'Account',
             path: '/account',
           }
