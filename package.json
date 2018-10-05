@@ -5,9 +5,9 @@
   "author": "J0NNYZER0",
   "license": "MIT",
   "scripts": {
-    "start": "source ~/envs/react-hapi-ssr/env && webpack -w & nodemon server.js",
+    "start": "source ~/envs/react-hapi-ssr/env & webpack -w & nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prod": "node server.js"
+    "prod": "webpack -w & node server.js"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
