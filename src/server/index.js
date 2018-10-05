@@ -18,7 +18,7 @@ import App from '../shared/App'
 // Create Hapi server
 const Server = Hapi.server({
     host:'0.0.0.0',
-    port:8000,
+    port: process.env.PORT || 5000,
     state: { ignoreErrors: true }
 })
 
