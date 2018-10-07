@@ -19,6 +19,7 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
+    "json-loader": "^0.5.7",
     "nodemon": "^1.18.4",
     "redux-immutable-state-invariant": "^2.1.0",
     "webpack": "^4.20.2",

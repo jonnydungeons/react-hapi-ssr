@@ -14,7 +14,8 @@ const path = require('path'),
         {
           test: /\.(js)$/,
           use: 'babel-loader',
-        }
+        },
+        { test: /\.(json)$/, loader: 'json' }
       ]
     },
     plugins: [
