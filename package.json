@@ -8,6 +8,7 @@
     "start": "nodemon --exec babel-node server.js",
     "build": "webpack -w",
     "clean": "rm -rf assets && rm server.js",
+    "reset_node_modules": "rm -rf node_modules && rm package-lock.json && yarn.lock && \"npm i\" && \"yarn install\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prod": "node server.js"
   },
@@ -16,7 +17,6 @@
     "@babel/core": "^7.1.2",
     "@babel/node": "^7.0.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
@@ -28,6 +28,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "hapi": "^17.6.0",
     "hapi-auth-cookie": "^9.0.0",
     "inert": "^5.1.0",
