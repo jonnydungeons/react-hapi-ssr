@@ -29,7 +29,7 @@ const path = require('path'),
   serverConfig = {
     target: 'node',
     mode: 'production',
-    entry: ['@babel/polyfill','./src/server/index.js'],
+    entry: ['@babel/polyfill', './src/server/index.js'],
     output: {
       path: __dirname,
       filename: 'server.js',
