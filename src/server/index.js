@@ -46,7 +46,6 @@ const pre1 = async(request, h) => {
       context = { ...data },
       store = configureStore()
 
-      console.log('context', context)
       const markup = renderToString(
       <Provider store={store}>
         <StaticRouter location={request.url.path} context={context}>
@@ -56,7 +55,7 @@ const pre1 = async(request, h) => {
         </StaticRouter>
       </Provider>
     )
-    console.log('context', context)
+
     return `<!DOCTYPE html>
       <html>
         <head>
