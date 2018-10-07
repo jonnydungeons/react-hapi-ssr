@@ -19,7 +19,8 @@ import App from '../shared/App'
 const Server = Hapi.server({
     host:'0.0.0.0',
     port: process.env.PORT || 3000,
-    state: { ignoreErrors: true }
+    state: { ignoreErrors: true },
+    debug: { request: ['*'] }
 })
 
 // Setup cache

@@ -4,9 +4,13 @@
   "description": "",
   "author": "J0NNYZER0",
   "license": "MIT",
+  "engines": {
+    "node": "^8.12.0",
+    "npm": "^6.4.1"
+  },
   "scripts": {
     "start": "nodemon --exec babel-node server.js",
-    "build": "webpack -w",
+    "build": "webpack -p",
     "clean": "rm -rf assets && rm server.js",
     "reset_node_modules": "rm -rf node_modules && rm package-lock.json && yarn.lock && \"npm i\" && \"yarn install\"",
     "test": "echo \"Error: no test specified\" && exit 1",
