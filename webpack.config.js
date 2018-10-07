@@ -39,14 +39,7 @@ const path = require('path'),
       rules: [
         {
           test: /\.(js)$/,
-          exclude: /(node_modules)/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env', '@babel/preset-react'],
-              plugins: [require('@babel/plugin-proposal-object-rest-spread')]
-            }
-          },
+          use: 'babel-loader',
         }
       ]
     },

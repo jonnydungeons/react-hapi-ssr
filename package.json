@@ -5,12 +5,15 @@
   "author": "J0NNYZER0",
   "license": "MIT",
   "scripts": {
-    "start": "source ~/envs/react-hapi-ssr/env & webpack -w & nodemon server.js",
+    "start": "nodemon server.js",
+    "build": "webpack -w",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prod": "babel-node server.js"
+    "prod": "node server.js"
   },
   "devDependencies": {
+    "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
+    "@babel/node": "^7.0.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
