@@ -24,7 +24,8 @@
     "nodemon": "^1.18.4",
     "redux-immutable-state-invariant": "^2.1.0",
     "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.1"
+    "webpack-cli": "^3.1.1",
+    "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
     "hapi": "^17.6.0",

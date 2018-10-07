@@ -1,5 +1,6 @@
 const path = require('path'),
   webpack = require('webpack'),
+  nodeExternals = require('webpack-node-externals'),
   browserConfig = {
     resolve: {
       extensions: ['*', '.js', '.jsx', '.json']
@@ -19,8 +20,8 @@ const path = require('path'),
           use: 'babel-loader',
         },
         {
-          test: /\.json$/,
-          loader: 'json-loader',
+          test: /\.json($|\?)/,
+          use: 'json-loader',
           type: 'javascript/auto'
         }
       ]
@@ -36,6 +37,7 @@ const path = require('path'),
   },
   serverConfig = {
     target: 'node',
+    externals: [nodeExternals()],
     mode: 'production',
     entry: ['@babel/polyfill', './src/server/index.js'],
     output: {
@@ -48,6 +50,11 @@ const path = require('path'),
         {
           test: /\.js$/,
           use: 'babel-loader',
+        },
+        {
+          test: /\.json($|\?)/,
+          use: 'json-loader',
+          type: 'javascript/auto'
         }
       ]
     },
