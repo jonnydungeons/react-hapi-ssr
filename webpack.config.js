@@ -3,7 +3,7 @@ const path = require('path'),
   browserConfig = {
     target: 'web',
     mode: 'production',
-    entry: ['./src/browser/index.js'],
+    entry: ['@babel/polyfill','./src/browser/index.js'],
     output: {
       path: path.resolve(__dirname, 'assets'),
       filename: 'bundle.js',
