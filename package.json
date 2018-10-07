@@ -5,8 +5,9 @@
   "author": "J0NNYZER0",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodemon --exec babel-node server.js",
     "build": "webpack -w",
+    "clean": "rm -rf assets && rm server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prod": "node server.js"
   },

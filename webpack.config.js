@@ -1,6 +1,9 @@
 const path = require('path'),
   webpack = require('webpack'),
   browserConfig = {
+    resolve: {
+      extensions: ['*', '.js', '.jsx', '.json']
+    },
     target: 'web',
     mode: 'production',
     entry: ['./src/browser/index.js'],
@@ -12,10 +15,14 @@ const path = require('path'),
     module: {
       rules: [
         {
-          test: /\.(js)$/,
+          test: /\.js$/,
           use: 'babel-loader',
         },
-        { test: /\.(json)$/, loader: 'json' }
+        {
+          test: /\.json$/,
+          loader: 'json-loader',
+          type: 'javascript/auto'
+        }
       ]
     },
     plugins: [
@@ -39,7 +46,7 @@ const path = require('path'),
     module: {
       rules: [
         {
-          test: /\.(js)$/,
+          test: /\.js$/,
           use: 'babel-loader',
         }
       ]
