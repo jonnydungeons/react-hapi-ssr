@@ -10,11 +10,14 @@
   },
   "scripts": {
     "start": "nodemon --exec babel-node server.js",
-    "build": "webpack -w",
-    "clean": "rm -rf assets && rm server.js",
+    "webpack": "webpack -p",
+    "babel_shared": "babel src/shared -d shared",
+    "babel_server": "babel src/server -d server",
+    "build": "npm run webpack && npm run babel_shared && npm run babel_server",
+    "clean": "rm -rf assets && rm -rf shared && rm server.js",
     "reset_node_modules": "rm -rf node_modules && rm package-lock.json && yarn.lock && \"npm i\" && \"yarn install\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prod": "node --inspect server.js"
+    "prod": "node server/index.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",

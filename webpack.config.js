@@ -34,7 +34,7 @@ const path = require('path'),
         }
       })
     ]
-  },
+  }/*,
   serverConfig = {
     target: 'node',
     externals: [nodeExternals()],
@@ -66,6 +66,6 @@ const path = require('path'),
         }
       })
     ]
-  }
+  }*/
 
-module.exports = [browserConfig, serverConfig]
+module.exports = [browserConfig/*, serverConfig*/]

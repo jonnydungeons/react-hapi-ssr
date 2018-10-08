@@ -1,8 +1,11 @@
+'use strict'
+
 import Hapi from 'hapi'
 import Bounce from 'bounce'
 import HapiAutCookie from 'hapi-auth-cookie'
 import Inert from 'inert'
 import Path from 'path'
+import '@babel/polyfill'
 import React from 'react'
 import { StaticRouter, matchPath } from 'react-router-dom'
 import { renderToString } from 'react-dom/server'
