@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "nodemon --exec babel-node server.js",
-    "build": "webpack -p",
+    "build": "webpack -w",
     "clean": "rm -rf assets && rm server.js",
     "reset_node_modules": "rm -rf node_modules && rm package-lock.json && yarn.lock && \"npm i\" && \"yarn install\"",
     "test": "echo \"Error: no test specified\" && exit 1",

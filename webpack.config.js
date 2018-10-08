@@ -6,7 +6,7 @@ const path = require('path'),
       extensions: ['*', '.js', '.jsx', '.json']
     },
     target: 'web',
-    mode: 'production',
+    mode: 'development',
     entry: ['./src/browser/index.js'],
     output: {
       path: path.resolve(__dirname, 'assets'),
@@ -38,7 +38,7 @@ const path = require('path'),
   serverConfig = {
     target: 'node',
     externals: [nodeExternals()],
-    mode: 'production',
+    mode: 'development',
     entry: ['@babel/polyfill', './src/server/index.js'],
     output: {
       path: __dirname,
